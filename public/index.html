@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloud Hosted Azure Managed Asset Repo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg'); /* Replace with your image URL */
+      background-size: cover; /* Ensure the image covers the entire page */
+      background-position: center; /* Center the image */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: white; /* Text color changed to white for better visibility */
+    }
+
+    .container {
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+      padding: 40px 60px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h1 {
+      color: #333;
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .title {
+      color: #4CAF50;
+      font-size: 1.8em;
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+
+    .file-input-container {
+      margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .file-label {
+      display: inline-block;
+      padding: 12px 25px;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: background-color 0.3s ease;
+    }
+
+    .file-label:hover {
+      background-color: #45a049;
+    }
+
+    .upload-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1.1em;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    .upload-button:hover {
+      background-color: #45a049;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 1.1em;
+      color: #333;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .success {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- CHAMAR Title -->
+    <div class="title">
+      Cloud Hosted Azure Managed Asset Repo
+    </div>
+
+    <!-- Upload Your File Title -->
+    <h1>Upload Your File</h1>
+
+    <!-- File Upload Form -->
+    <form id="uploadForm" enctype="multipart/form-data">
+      <div class="file-input-container">
+        <label for="fileInput" class="file-label">Choose File</label>
+        <input type="file" id="fileInput" name="file" required />
+      </div>
+
+      <button type="submit" class="upload-button">Upload</button>
+    </form>
+
+    <!-- Feedback message -->
+    <div id="message" class="message"></div>
+  </div>
+
+  <script>
+    const uploadForm = document.getElementById('uploadForm');
+    const messageDiv = document.getElementById('message');
+
+    // Handle file upload
+    uploadForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(uploadForm);
+
+      try {
+        const response = await fetch('/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const text = await response.text(); // Read response as plain text
+
+        messageDiv.innerText = text; // Display success or error message
+        messageDiv.classList.remove('error', 'success');
+
+        if (response.ok) {
+          messageDiv.classList.add('success');
+        } else {
+          messageDiv.classList.add('error');
+        }
+      } catch (error) {
+        messageDiv.innerText = 'Error: Unable to upload file';
+        messageDiv.classList.add('error');
+      }
+    });
+  </script>
+
+</body>
+</html>
